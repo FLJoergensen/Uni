@@ -48,24 +48,9 @@ Merge-sort: Ist geschachtelt, da in der merge Rekursion auf merge-sort zurückge
 (IS icons bildvergleich)
 
 ;3
-(define B '(above/align "center"))
-(define (BA x funcX acc)
-  (eval (append '(above/align "center") (aeste x funcX acc '()))))
-(define (aeste x funcX acc xsc)
-  (cond ((= 0 acc) xsc)
-        (else (aeste (funcX x) funcX (- acc 1) (cons (isosceles-triangle x 105 "solid" "darkgreen") xsc)))))
-(define (t x acc)
-  (cond ((= acc 0) (isosceles-triangle (* 45 acc) 105 "solid" "darkgreen"))
-        (else (overlay/offset (isosceles-triangle (* 45 acc) 105 "solid" "darkgreen") 0 (* x 0.8) (t (+ x 100) (- acc 1))))))
-
-(define baum1 (above/align "center"
-;; der Stern an der Spitze
-(star-polygon 40 5 2 "solid" "gold")
-;; die Zweige
-(ellipse 20 40 "solid" "darkgreen")
-(ellipse 80 50 "solid" "darkolivegreen")
-(ellipse 130 60 "solid" "olivedrab")
-(ellipse 180 80 "solid" "darkgreen")
-;; der Stamm
-(rectangle 40 60 "solid" "brown")
-))
+(define (genBaum)
+  (genÄste 0 0 20 4 (rectangle 40 60 "solid" "brown")))
+(define (genÄste x X Y acc prePic)
+  (cond ((= acc 0) (overlay/offset (isosceles-triangle (* 45 acc) 105 "solid" "darkgreen") X (- Y 50) prePic))
+        (else (overlay/offset (isosceles-triangle (* 45 acc) 105 "solid" "darkgreen") X (- Y 50) (genÄste x X (+ Y (* 105 0.5)) (- acc 1) prePic)))))
+(genBaum)
