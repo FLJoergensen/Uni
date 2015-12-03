@@ -37,4 +37,6 @@
 (define (scaleList xs)
   (map (curryr / (max-of-list xs)) xs))
 (define (rescale1d xs x)
-  (map (curry + (- (cdr x) (car x))) (map (curry * (- (cdr x) (car x))) (scaleList xs))))
+  (map (curry + (car x)) (map (curry * (- (cdr x) (car x))) (scaleList xs))))
+(define (rescale2d xs xX xY)
+  (map cons (rescale1d (map car xs) xX) (rescale1d (map cdr xs) xY)))
