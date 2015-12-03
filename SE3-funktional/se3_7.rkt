@@ -23,6 +23,7 @@
 (define Range range3)
 ;2
 ;;2.1
+;;;(function->points (curry + 2) 10 5)
 (define (function->points func x acc)
   (map cons
        (Range x acc)
@@ -40,3 +41,24 @@
   (map (curry + (car x)) (map (curry * (- (cdr x) (car x))) (scaleList xs))))
 (define (rescale2d xs xX xY)
   (map cons (rescale1d (map car xs) xX) (rescale1d (map cdr xs) xY)))
+;;2.3
+(require 2htdp/image)
+(require lang/posn)
+;(place-image (ellipse 10 10 "solid" "blue") 0 0 (empty-scene 800 600))
+(define SCENE (empty-scene 800 600))
+(define (draw-points xs)
+  (place-images
+   (map (lambda (x)(ellipse 10 10 "solid" "blue")) xs)
+   (map (lambda (x)(make-posn (car x) (cdr x)))
+        (rescale2d xs '(0 . 800) '(0 . 600)))
+   SCENE))
+
+(define (draw-points2 xs)
+  (map
+   (curryr draw-point SCENE)
+       (rescale2d xs '(0 . 800) '(0 . 600))))
+(define (draw-point XY s)
+  (place-image (ellipse 10 10 "solid" "blue") (car XY) (cdr XY) s))
+;;2.4
+(define (function->plot func x acc)
+  (draw-points (function->points func x acc)))
