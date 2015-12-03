@@ -28,3 +28,13 @@
        (Range x acc)
        (map func (Range x acc))))
 ;;2.2
+(define (max-of-list xs)
+  (m-o-l xs 0))
+(define (m-o-l xs acc)
+  (cond ((empty? xs) acc)
+        ((< acc (car xs)) (m-o-l (cdr xs) (car xs)))
+        (else (m-o-l (cdr xs) acc))))
+(define (scaleList xs)
+  (map (curryr / (max-of-list xs)) xs))
+(define (rescale1d xs x)
+  (map (curry + (- (cdr x) (car x))) (map (curry * (- (cdr x) (car x))) (scaleList xs))))
