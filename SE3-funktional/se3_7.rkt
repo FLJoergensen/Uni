@@ -40,7 +40,7 @@
 ;;;(rescale1d '(10 100) '(2 . 100))
 (define (rescale1d xs x)
   (map (curry + (car x)) (map (curry * (- (cdr x) (car x))) (scaleList xs))))
-;;;(rescale2d '((10 . 10) (100 . 100) (0 . 80) '(0 . 600))
+;;;(rescale2d '((10 . 10) (100 . 100)) '(0 . 80) '(0 . 600))
 (define (rescale2d xs xX xY)
   (map cons (rescale1d (map car xs) xX) (rescale1d (map cdr xs) xY)))
 ;;2.3
