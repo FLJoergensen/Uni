@@ -23,7 +23,7 @@
 (define Range range3)
 ;2
 ;;2.1
-;;;(function->points (curry + 2) 10 5)
+;;;(function->points (curry + 2) '(0 . 10) 5)
 (define (function->points func x acc)
   (map cons
        (Range x acc)
