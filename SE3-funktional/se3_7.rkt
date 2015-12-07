@@ -37,8 +37,10 @@
         (else (m-o-l (cdr xs) acc))))
 (define (scaleList xs)
   (map (curryr / (max-of-list xs)) xs))
+;;;(rescale1d '(10 100) '(2 . 100))
 (define (rescale1d xs x)
   (map (curry + (car x)) (map (curry * (- (cdr x) (car x))) (scaleList xs))))
+;;;(rescale2d '((10 . 10) (100 . 100) (0 . 80) '(0 . 600))
 (define (rescale2d xs xX xY)
   (map cons (rescale1d (map car xs) xX) (rescale1d (map cdr xs) xY)))
 ;;2.3
@@ -79,12 +81,13 @@
 (define (gib-tPs func tickCount)
   (curry ticksPsec func tickCount))
 ;;2.6
+;;;(draw-lines '((1 . 1) (2 . 2) (100 . 100)) SCENE)
 (define (draw-lines xs s)
   (cond ((empty? (cdr xs)) s)
         (else (draw-line (car xs) (cadr xs) (draw-lines (cdr xs) s)))))
 (define (draw-line p1 p2 s)
   (add-line s (car p1) (cdr p1) (car p2) (cdr p2) "blue"))
-
+;;;(draw '((10 . 10) (40 . 80) (100 . 100) (400 . 400)) "line")
 (define (draw xs mode)
   (cond ((equal? mode "line") (draw-lines (rescale2d xs '(0 . 800) '(0 . 600)) SCENE))
         (else (draw-points xs))))
