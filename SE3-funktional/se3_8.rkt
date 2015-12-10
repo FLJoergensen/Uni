@@ -25,6 +25,7 @@ d) Nein, da x eine Zahl sein muss
 ;;;ZUSATZ
 
 ;2
+;;;TODO: höerer
 ;;2.1
 (define (sqrtXS xs)
   (cond ((empty? xs) '())
@@ -53,6 +54,7 @@ d) Nein, da x eine Zahl sein muss
              (waves oval rectangle)
              (outline solid hatched)
              (red green blue)))
+;;;;TODO:
 ;;;kp weil es einfacher ist
 ;;3.2
 (define (drawCard xs)
