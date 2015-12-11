@@ -48,15 +48,27 @@ d) Nein, da x eine Zahl sein muss
 ;3
 (require se3-bib/setkarten-module)
 ;;3.1
-;;;Spielkarte = '(1,'wave,'solid,'blue)
+;;;Spielkarte = (Card 1 'wave 'solid 'blue)
 ;;;KM = Kartenmerkmale
 (define KM '((1 2 3)
              (waves oval rectangle)
              (outline solid hatched)
              (red green blue)))
-;;;;TODO:
-;;;kp weil es einfacher ist
+(define (Card count img fill color)
+  (lambda (x)
+    (cond ((equal? x "anzahl") count)
+          ((equal? x "bild") img)
+          ((equal? x "fill") fill)
+          ((equal? x "farbe") color)
+          ((equal? x "AsList") `(,count ,img ,fill ,color))
+          (else (error "Kein gültiges Argument")))))
+;;;Da mit wir eine art object haben und trozdem mit listen arbeiten können
 ;;3.2
+(define (Card-Draw c)
+  (drawCard (c "AsList")))
+(define (Card-Deck)
+  (map (lambda (x) (apply Card x)) (genDeck)))
+
 (define (drawCard xs)
   (show-set-card (car xs) (cadr xs) (caddr xs) (cadddr xs)))
 (define (drawCards)
@@ -71,10 +83,8 @@ d) Nein, da x eine Zahl sein muss
                                                 (list-ref (caddr KM) (modulo (round (/ acc (expt 3 2))) 3))
                                                 (list-ref (cadddr KM) (modulo (round (/ acc (expt 3 3))) 3))) XS)))))
 ;;3.3
-(define (is-a-set?2 . xs)
-  (let [(XS (map car xs))]
-    (cond ((empty? (cdar xs)) (display XS) (or (is-all-same? XS) (is-all-different? XS)))
-          (else (and (or (is-all-same? XS) (is-all-different? XS)) (is-a-set? (map cdr xs)))))))
+(define (Card-Set? c1 c2 c3)
+  (is-a-set? (c1 "AsList") (c2 "AsList") (c3 "AsList")))
 (define (is-a-set? xs1 xs2 xs3)
   (let [(XS (map car (list xs1 xs2 xs3)))]
     (cond ((empty? (cdr xs1)) (or (is-all-same? XS) (is-all-different? XS)))
@@ -106,4 +116,32 @@ d) Nein, da x eine Zahl sein muss
 (define (r-c xs acc XS)
   (cond ((= acc 0) XS)
         (else (r-c (cdr xs) (- acc 1) (cons (car xs) XS)))))
-(ran-count 12 (genDeck))
+
+(define (erstelle-Liste v acc)
+  (cond ((= acc 0) '())
+        (else (cons v (erstelle-Liste v (- acc 1))))))
+(define (Alle-Möglichen x xs)
+  (cond ((= x 1) (map list xs))
+        (else (all-pos xs (Alle-Möglichen (- x 1) xs)))))
+(define (all-pos xs xsbase)
+  (apply append (map (lambda (x) (map (lambda (y) (cons x y)) xsbase)) xs)))
+
+(define (Alle-Sets xs)
+  (filter ist-eindeutig? (filter ist-eindeutig? (filter (lambda (x) (apply Card-Set? x)) (Alle-Möglichen 3 xs)))))
+(define (ist-eindeutig? xs)
+  (= 1 (apply max (map (curryr count-v-in-L xs) xs))))
+(define (count-v-in-L v xs)
+  (c-v-i-L v xs 0))
+(define (c-v-i-L v xs acc)
+  (cond ((empty? xs) acc)
+        ((equal? v (car xs)) (c-v-i-L v (cdr xs) (+ acc 1)))
+        (else (c-v-i-L v (cdr xs) acc))))
+
+(define feld (ran-count 12 (Card-Deck)))
+(define MCD (curry map Card-Draw))
+;(map Card-Draw feld)
+;(map (lambda (x) (map (lambda (y) (y "AsList")) x)) (Alle-Möglichen 3 feld))
+(MCD feld)
+(length (Alle-Möglichen 3 feld))
+(map MCD (Alle-Sets feld))
+(length (Alle-Sets feld))
