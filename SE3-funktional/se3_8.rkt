@@ -9,11 +9,14 @@ Wenn die gegebene Function einen Parameter hat der eine Funtion sein soll.
 #|
 a) Ja,da foldl einen Parameter hat der eine funktion sein muss
 b) Nein, da x eine Zahl sein muss
-?c) Ja, da f ein Parameter ist der als function für arg1 und arg2 verwendet wird
+c) Ja, da f ein Parameter ist der als function für arg1 und arg2 verwendet wird
 d) Nein, da x eine Zahl sein muss
 |#
 ;;1.3
-;;;?
+#|
+(pepper max 5) = procedur:f=max,arg1=5,arg2=?
+((pepper max 5)7)=procedur:f=max,arg2=5,arg2=7
+|#
 ;;1.4
 #|
 1: 2/3 ?
@@ -22,21 +25,18 @@ d) Nein, da x eine Zahl sein muss
 4: '(9941.0 212.0 32 33.8 1832.0 -459.66999999999996) ?
 |#
 ;;1.5
-;;;ZUSATZ
+;;; die ursprungs Function wandeld °C in Fahrenheit um
+(compose (curryr / 18) (curryr - 32))
 
 ;2
-;;;TODO: höerer
 ;;2.1
 (define (sqrtXS xs)
-  (cond ((empty? xs) '())
-        (else (cons (sqrt (car xs)) (sqrtXS (cdr xs))))))
+  (map sqrt xs))
 ;;2.2
 (define (durch xs)
   (durch-Z 3 xs))
 (define (durch-Z x xs)
-  (cond ((empty? xs) '())
-        ((= (modulo (car xs) x) 0) (cons (car xs) (durch-Z x (cdr xs))))
-        (else (durch-Z x (cdr xs)))))
+  (filter (compose (curry = 0) (curryr / x)) xs))
 ;;2.3
 (define (SUM-Größer xs)
   (s-gößer-als-x 10 xs 0))
@@ -47,6 +47,7 @@ d) Nein, da x eine Zahl sein muss
         (else (s-gößer-als-x x (cdr xs) acc))))
 ;3
 (require se3-bib/setkarten-module)
+
 ;;3.1
 ;;;Spielkarte = (Card 1 'wave 'solid 'blue)
 ;;;KM = Kartenmerkmale
