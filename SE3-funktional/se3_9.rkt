@@ -1,19 +1,18 @@
 #lang swindle
 (require swindle/setf
-         swindle/misc)
+         swindle/misc
+         racket/format)
 
 ;1
 ;;1.1
-; 1.1
-
-; allgemeine wissenschaftliche Publikation
+;;;Publikation
 (defclass* publikation ()
-  (schlüssel
+  (key
    :reader publikation-schlüssel
    :writer set-publikation-schlüssel!
-   :initvalue 0
+   :initvalue void
    :initarg :pubSchlüssel
-   :documentation "Der Schlüssel der Publikation"
+   :documentation "eindeutiger schlüssel"
    )
   (autoren
    :reader publikation-autoren
@@ -21,7 +20,7 @@
    :initvalue '()
    :initarg :pubAutoren
    :type <list>
-   :documentation "Die Autoren der Publikation"
+   :documentation "die autoren"
    )
   (jahr
    :reader publikation-jahr
@@ -29,7 +28,7 @@
    :initvalue "0"
    :initarg :pubJahr
    :type <string>
-   :documentation "Das Erscheinungsjahr"
+   :documentation "erscheinungsjahr"
    )
   (titel
    :reader publikation-titel
@@ -37,14 +36,14 @@
    :initvalue ""
    :initarg :pubTitel
    :type <string>
-   :documentation "Der Titel"
+   :documentation "Titel"
    )
   :autopred #t
   :printer #t
-  :documentation "The top class of all publications"
+  :documentation "publikations ober klasse"
   )
 
-; Buch erbt von Publikation
+;;;Buch erbt Publikation
 (defclass* buch (publikation)
   (verlag
    :reader buch-verlag
@@ -52,7 +51,7 @@
    :initvalue ""
    :initarg :buchVerlag
    :type <string>
-   :documentation "Der Verlag des Buches"
+   :documentation "verlag"
    )
   (verlagort
    :reader buch-verlagort
@@ -60,7 +59,7 @@
    :initvalue ""
    :initarg :buchVerlagort
    :type <string>
-   :documentation "Der Ort des Verlages"
+   :documentation "ort des verlages"
    )
   (reihe
    :reader buch-reihe
@@ -68,7 +67,7 @@
    :initvalue ""
    :initarg :buchReihe
    :type <string>
-   :documentation "Die Reihe des Buches"
+   :documentation "buchreihe"
    )
   (reihe-seriennummer
    :reader buch-reihe-seriennummer
@@ -76,22 +75,20 @@
    :initvalue "0"
    :initarg :buchSeriennummer
    :type <string>
-   :documentation "Die Seriennummer in der Reihe"
    )
   (edition
    :reader buch-edition
    :writer set-buch-edition!
-   :initvalue "1"
+   :initvalue ""
    :initarg :buchEdition
-   :type <string>
-   :documentation "Die Edition des Buches"
+   :documentation "Editions angabe"
    )
   :autopred #t
   :printer #t
-  :documentation "Ein Buch"
+  :documentation "Publiziertes Buch"
   )
 
-; Sammelbände erbt von Buch
+;;;Sammelbände erbt Buch
 (defclass* sammelband (buch)
   (herausgeber
    :reader sammelband-herausgeber
@@ -104,10 +101,10 @@
   (seitenangabe
    :reader sammelband-seitenangabe
    :writer set-sammelband-seitenangabe!
-   :initvalue ""
+   :initvalue 0
    :initarg :sammelbandSeitenangabe
-   :type <string>
-   :documentation "Die Seiten des Artikels"
+   :type <integer>
+   :documentation "Seite zum Artikel"
    )
   (name
    :reader sammelband-name
@@ -119,10 +116,10 @@
    )
   :autopred #t
   :printer #t
-  :documentation "Ein Sammelband"
+  :documentation "Sammelband von Büchern"
   )
 
-; Zeitschriftenartikel
+;;;Zeitschriftenartikel erbt Publikation
 (defclass* zeitschrift (publikation)
   (name
    :reader zeitschrift-name
@@ -130,23 +127,23 @@
    :initvalue ""
    :initarg :zeitschriftName
    :type <string>
-   :documentation "Der Name der Zeitschrift"
+   :documentation "Name"
    )
   (band-nummer
    :reader zeitschrift-band-nummer
    :writer set-zeitschrift-band-nummer!
-   :initvalue "0"
+   :initvalue 0
    :initarg :zeitschriftBandnummer
-   :type <string>
-   :documentation "Die Bandnummer der Zeitschrift"
+   :type <integer>
+   :documentation "Bandnummer der Zeitschrift"
    )
   (heft-nummer
    :reader zeitschrift-heft-nummer
    :writer set-zeitschrift-heft-nummer!
-   :initvalue "0"
+   :initvalue 0
    :initarg :zeitschriftHeftnummer
-   :type <string>
-   :documentation "Die Nummer des Heftes"
+   :type <integer>
+   :documentation "Nummer des Heftes"
    )
   (monat
    :reader zeitschrift-monat
@@ -158,22 +155,23 @@
    )
   :autopred #t
   :printer #t
-  :documentation "Ein Zeitschriftenartikel"
+  :documentation "Zeitschriftenartikel"
   )
 
-; Nessie
-(define nessie 
-  (make buch :pubTitel "Mein Leben im Loch Ness: Verfolgt als Ungeheuer"
+;;;Nessie
+(define NESSIE 
+  (make buch 
+        :pubTitel "Mein Leben im Loch Ness: Verfolgt als Ungeheuer"
         :pubJahr "1790"
         :pubSchlüssel 'Nessie1790
         :pubAutoren '("Nessie")
         :buchVerlag "Minority-Verlag"
         :buchVerlagort "Inverness"
         :buchReihe "Die besondere Biographie"
-        :buchSeriennummer "Band 1 der Reihe"))
+        :buchSeriennummer "Band 2 der Reihe"))
 
-; Prefect, F.
-(define prefect
+;;;Prefect, F.
+(define PREFECT
   (make sammelband 
         :pubTitel "Mostly harmless - some observations concerning the third planet of the solar system"
         :pubJahr "1979"
@@ -181,110 +179,95 @@
         :pubAutoren '("Prefect, F.")
         :buchVerlag "Galactic Press"
         :buchVerlagort "Vega-System, 3rd planet"
-        :buchReihe "\"Travel in Style\""
+        :buchReihe "Travel in Style"
         :buchSeriennummer "volume 5 of"
-        :buchEdition "1500 edition"
-        :sammelbandHerausgeber "Adams D., editor"
-        :sammelbandSeitenangabe "p. 500"
+        :buchEdition "1337 edition"
+        :sammelbandHerausgeber "Adams D."
+        :sammelbandSeitenangabe 420
         :sammelbandName "The Hitchhiker's Guide to the Galaxy"
         ))
 
-; Wells
-(define wells
+;;;Wells
+(define WELLS
   (make zeitschrift
         :pubSchlüssel 'Wells3200
         :pubTitel "Zeitmaschinen leicht gemacht"
         :pubAutoren '("Wells, H. G.")
         :pubJahr "3200"
         :zeitschriftName "Heimwerkerpraxis für Anfänger"
-        :zeitschriftBandnummer "500"
-        :zeitschriftHeftnummer "3"
+        :zeitschriftBandnummer 550
+        :zeitschriftHeftnummer 3
         ))
-; 1.2
-
+;;1.2
 (defgeneric cite ((pub publikation)))
 ; cite Methode für Bücher
 (defmethod cite ((pub buch))
-  "Display the correct citation for given book"
-  (display (string-append 
-            (car (publikation-autoren pub))
-            " (" (publikation-jahr pub) "). "
-            (publikation-titel pub) ", "
-            (buch-reihe-seriennummer pub) ": " 
-            (buch-reihe pub) ". "
-            (buch-verlag pub) ", " (buch-verlagort pub)
-            ".")))
+  (string-append 
+   (car (publikation-autoren pub))
+   " (" (publikation-jahr pub) "). "
+   (publikation-titel pub) ", "
+   (buch-reihe-seriennummer pub) ": " 
+   (buch-reihe pub) ". "
+   (buch-verlag pub) ", " (buch-verlagort pub)))
 ; cite Methode für Sammelbände
 (defmethod cite ((pub sammelband))
-  "Display the correct citation for given collection"
-  (display (string-append 
-            (car (publikation-autoren pub))
-            " (" (publikation-jahr pub) "). "
-            (publikation-titel pub) ". In "
-            (sammelband-herausgeber pub) ", "
-            (sammelband-name pub) ", "
-            (buch-reihe-seriennummer pub)" " 
-            (buch-reihe pub) ". "
-            (buch-verlag pub) ", " (buch-verlagort pub)
-            ", " (buch-edition pub) ", " 
-            (sammelband-seitenangabe pub) ".")))
-
+  (string-append 
+   (car (publikation-autoren pub))
+   " (" (publikation-jahr pub) "). "
+   (publikation-titel pub) ". In "
+   (sammelband-herausgeber pub) ", "
+   (sammelband-name pub) ", "
+   (buch-reihe-seriennummer pub)" " 
+   (buch-reihe pub) ". "
+   (buch-verlag pub) ", " (buch-verlagort pub)
+   ", " (buch-edition pub) ", " 
+   "p. " (~a (sammelband-seitenangabe pub)) "."))
 ; cite Methode für Zeitschriften
 (defmethod cite ((pub zeitschrift))
-  "Display the correct citation for given magazine article"
-  (display (string-append
-            (car (publikation-autoren pub))
-            " (" (publikation-jahr pub) "). "
-            (publikation-titel pub) ". "
-            (zeitschrift-name pub) ", "
-            (zeitschrift-band-nummer pub) "("
-            (zeitschrift-heft-nummer pub) ").")))
+  (string-append
+   (car (publikation-autoren pub))
+   " (" (publikation-jahr pub) "). "
+   (publikation-titel pub) ". "
+   (zeitschrift-name pub) ", "
+   (~a (zeitschrift-band-nummer pub)) "("
+   (~a (zeitschrift-heft-nummer pub)) ")."))
+
+(display (cite NESSIE))
+(display (cite PREFECT))
+(display (cite WELLS))
   
-; 1.3
+;;1.3
+#|
+Eine Ergänzungsmethode kann vor und nach der Methode der Oberklasse ausgeführt werden.
+Außerdem kann sie einhüllend wirken und wird sowohl vor als auch nach der Elternmethode aufgerufen.
 
-; Eine Ergänzungsmethode kann vor und nach der Methode der Oberklasse
-; ausgeführt werden. Außerdem kann sie einhüllend wirken und wird sowohl vor
-; als auch nach der Elternmethode aufgerufen.
+Die Vorteile sind, dass jede Ergänzungsmethode ausgeführt wird und damit keine Initialisierungen vergessen oder unterdrückt werden können,
+die in den Oberklassen definiert wurden.
+Desweiteren brauchen die geerbten Methoden nicht durch Modifikationen überladen zu werden, sondern werden nur ergänzt.
 
-; Die Vorteile sind, dass jede Ergänzungsmethode ausgeführt wird
-; und damit keine Initialisierungen vergessen oder unterdrückt 
-; werden können, die in den Oberklassen definiert wurden.
-; Desweiteren brauchen die geerbten Methoden nicht durch
-; Modifikationen überladen zu werden, sondern werden nur
-; ergänzt.
+Ergänzungsmethoden könnten dazu genutzt werden die Basis-cite Methode zu ergänzen, sodass nicht eine Methode für jede Publikationsform von Nöten ist.
+Dabei könnten die Informationen schrittweise aufgebaut werden.
+Allgemeine Information zu Beginn, dann buchspezifische, dann sammelbandspezifische.
+Für Zeitschriften würde eine alternative Reihenfolge von allgemeinen und zeitschriftenspezifischen Informationen genutzt werden.
 
-; Ergänzungsmethoden könnten dazu genutzt werden die Basis-cite
-; Methode zu ergänzen, sodass nicht eine Methode für jede Publikationsform
-; von Nöten ist. Dabei könnten die Informationen schrittweise
-; aufgebaut werden. Allgemeine Information zu Beginn, dann buchspezifische,
-; dann sammelbandspezifische. Für Zeitschriften würde eine alternative
-; Reihenfolge von allgemeinen und zeitschriftenspezifischen
-; Informationen genutzt werden.
+Allerdings käme es dort zu Problemen, wo Informationen zwischendrin eingefügt werden müssen.
+Die Sammelbandseitenangabe zum Beispiel erfolgt am Schluss, die restlichen Informationen jedoch in der Mitte vor den Buchinformationen wie Reihe und Verlag.
+|#
 
-; Allerdings käme es dort zu Problemen, wo Informationen zwischendrin
-; eingefügt werden müssen. Die Sammelbandseitenangabe zum Beispiel erfolgt
-; am Schluss, die restlichen Informationen jedoch in der Mitte vor den 
-; Buchinformationen wie Reihe und Verlag.
-
-; 2)
-
-; 2.1
-
-;(defclass fahrzeug ())
-
-; allgemeine Landfahrzeuge
-;(defclass landfahrzeug (fahrzeug))
-; Schienenfahrzeuge
-;(defclass schienenfahrzeug (fahrzeug))
-; Straßenfahrzeuge
-;(defclass straßenfahrzeug (fahrzeug))
-;(defclass wasserfahrzeug (fahrzeug))
-;(defclass luftfahrzeug (fahrzeug))
-
-;(defclass amphibienfahrzeug (wasserfahrzeug landfahrzeug))
-;(defclass amphibienflugzeug (luftfahrzeug wasserfahrzeug straßenfahrzeug))
-;(defclass zweiwegefahrzeug (schienenfahrzeug straßenfahrzeug))
-;(defclass zeitzug (schienenfahrzeug luftfahrzeug))
+;2
+;;2.1
+#|
+(defclass fahrzeug ())
+  (defclass landfahrzeug (fahrzeug))
+    (defclass schienenfahrzeug (landfahrzeug))
+    (defclass straßenfahrzeug (landfahrzeug))
+  (defclass wasserfahrzeug (fahrzeug))
+  (defclass luftfahrzeug (fahrzeug))
+(defclass amphibienfahrzeug (wasserfahrzeug landfahrzeug))
+(defclass amphibienflugzeug (straßenfahrzeug wasserfahrzeug luftfahrzeug))
+(defclass zweiwegefahrzeug (straßenfahrzeug schienenfahrzeug))
+(defclass zeitzug (schienenfahrzeug luftfahrzeug))
+|#
 
 ; 2.2
 
