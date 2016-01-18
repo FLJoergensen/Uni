@@ -1,7 +1,8 @@
 #lang swindle
 (require se3-bib/prolog/prologInScheme)
 
-; 1.1
+
+;1.1
 (?- (= (Laptop ?Marke schwarz) (Laptop MacBook ?Farbe)))
 ; Erzeugt die Variablen:
 ; ?Marke = MacBook
@@ -29,18 +30,23 @@
 
 ;1.2
 ; ( ausleihe Signatur Lesernummer)
-(<- ( ausleihe "P␣201" 100))
-(<- ( ausleihe "P␣30" 102))
-(<- ( ausleihe "P␣32" 104))
-(<- ( ausleihe "P␣50" 104))
+(<- ( ausleihe "P 201" 100))
+(<- ( ausleihe "P 30" 102))
+(<- ( ausleihe "P 32" 104))
+(<- ( ausleihe "P 50" 104))
 
 ; ( vorbestellung Signatur Lesernummer)
-(<- ( vorbestellung "P␣201" 104))
-(<- ( vorbestellung "P␣201" 102))
-(<- ( vorbestellung "P␣30" 100))
-(<- ( vorbestellung "P␣30" 104))
+(<- ( vorbestellung "P 201" 104))
+(<- ( vorbestellung "P 201" 102))
+(<- ( vorbestellung "P 30" 100))
+(<- ( vorbestellung "P 30" 104))
 
 ; (leser Name Vorname Lesernummer Geburtsjahr)
 (<- (leser Neugierig Nena 100 1989))
 (<- (leser Linux Leo 102 1990))
 (<- (leser Luator Eva 104 1988))
+
+;(?- (vorbestellung "P 201" ?A))
+;(?- (leser Linux Leo ?A ?B))
+;(?- (ausleihe "P 30" ?ID) (leser ?Nachname ?Vorname ?ID ?Geb))
+(?- )
