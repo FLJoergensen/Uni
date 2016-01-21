@@ -7,3 +7,6 @@
         ((member #\7 (string->list (~a x))) (cons 'sum (BöseSieben (+ x 1))))
         (else (cons x (BöseSieben (+ x 1))))))
 ;3
+(define (fib x)
+  (cond ((< x 2) 1)
+        (else (cons (+ (fib (- x 1)) (fib (- x 2))) (fib (+ x 1))))))
