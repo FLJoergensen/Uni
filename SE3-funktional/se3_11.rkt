@@ -47,6 +47,6 @@
 (<- (leser Luator Eva 104 1988))
 
 ;(?- (vorbestellung "P 201" ?A))
-;(?- (leser Linux Leo ?A ?B))
+;(?- (leser Linux Leo ?A ?))
 ;(?- (ausleihe "P 30" ?ID) (leser ?Nachname ?Vorname ?ID ?Geb))
 (?- )
