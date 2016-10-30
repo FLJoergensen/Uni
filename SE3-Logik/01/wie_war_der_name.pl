@@ -18,11 +18,11 @@ assertz : am ende?
 A2
 1.
 a)mutter_von(julia,otto).
-Ja
+true
 b)vater_von(otto,helga).
-Ja
+true
 c)vater_von(Vater,julia).
-existiert nicht
+false
 d)vater_von(otto,Kind).
 Kind=hans;
 Kind=helga.
