@@ -23,7 +23,21 @@ b)vater_von(otto,helga).
 Ja
 c)vater_von(Vater,julia).
 existiert nicht
-d)vater_von(otto,Kind). eigentlich mehr??
-Kind=hans.
+d)vater_von(otto,Kind).
+Kind=hans;
+Kind=helga.
+e)mutter_von(M,K1);vater_von(V,K1).
+f)not(vater_von(hans,Kind)).
+true
+g)not(vater_von(johannes,Kind)).
+false
+h)vater_von(otto,_).
+true
+2.
+mutter_von(charlotte,Kind),(mutter_von(Kind,Enkel);vater_von(Kind,Enkel)).
+3.
+trace()
+help(trace)
+nodebug()
 
 */
