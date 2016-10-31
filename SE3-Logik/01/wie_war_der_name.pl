@@ -67,9 +67,7 @@ vater_von(otto,_).
 mutter_von(charlotte,Kind),(mutter_von(Kind,Enkel);vater_von(Kind,Enkel)).
 
 %% 3.
-% trace()
-% help(trace)
-% nodebug()
+
 /*
 Im Trace werden die Einzelschritte angezeigt, welche von Prolog durchgeführt werden.
 -Call: Es wird eine moegliche Belegung fuer Variablen in einer Relation gesucht.
@@ -119,3 +117,4 @@ vater_von(otto,_).
 % ->    Call: (7) vater_von(otto, _G6002) ? creep
 % ->    Exit: (7) vater_von(otto, hans) ? creep
 % -> true .
+nodebug().
