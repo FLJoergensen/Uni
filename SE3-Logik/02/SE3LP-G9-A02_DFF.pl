@@ -20,6 +20,18 @@
 
 
 %%% A4 %%%
+/*
+Fakt: Fakten sind elementare Klauseln einer Datenbank, welche jeweils ein Element
+einer Relation mit dem angegebenen Prädikatsnamen und den dazugehörigen
+Argumenten spezifizieren, wobei eine unterschiedliche Stelligkeit desselben
+Prädikatsnamens eine unterschiedliche Relation definiert.
 
+Regel:
+
+Anfrage: Anfragen sind ebenfalls elementare Klauseln einer Datenbank, welche am
+Systemprompt einzugeben sind. Sie prüfen anhand der Fakten der Datenbasis auf Konsistenz
+unter Berücksichtigung der closed world assumption (alle Fakten, welche nicht in der
+Datenbasis vorliegen, sind als false anzunehmen).
+*/
 
 %%% A5 %%%
