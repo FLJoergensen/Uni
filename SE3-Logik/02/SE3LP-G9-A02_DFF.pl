@@ -32,29 +32,38 @@ P1 und P2 sind halbgeschwister (Gleicher Vater unterschidliche Mutter)
 %%% A3 %%%
 
 %%1.
+
+:- dynamic anschluss/2.
+
 %anschluss(NR,Name)
-anschluss(0,otter)
-anschluss(1,hans)
-anschluss(2,peter)
-anschluss(3,hellen)
-anschluss(4,petra)
+anschluss(0,otter).
+anschluss(1,hans).
+anschluss(2,peter).
+anschluss(3,hellen).
+anschluss(4,petra).
+
+:- dynamic ip/4.
 
 %ip(ip,von,bis,anschlussNR)
-ip(0.0.0.1,20120101,20130101,0)
-ip(0.2.0.0,20120101,20120307,1)
-ip(0.0.1.0,20120307,20130101,1)
-ip(10.0.0.1,20120101,20130101,4)
-ip(0.10.0.1,20120101,20121120,3)
-ip(0.10.3.1,20121120,20130101,3)
-ip(0.10.66.1,20120301,20120701,2)
+ip("0.0.0.1",20120101,20130101,0).
+ip("0.2.0.0",20120101,20120307,1).
+ip("0.0.1.0",20120307,20130101,1).
+ip("10.0.0.1",20120101,20130101,4).
+ip("0.10.0.1",20120101,20121120,3).
+ip("0.10.3.1",20121120,20130101,3).
+ip("0.10.66.1",20120301,20120701,2).
 
+:- dynamic connection/3.
 
 %connection(ip,ip,zeitpunk)
-connection(0.0.0.1,0.2.0.0,20120203)
-connection(10.0.0.1,0.10.66.1,20120203)
-connection(0.10.0.1,10.0.0.1,20120403)
+connection("0.0.0.1","0.2.0.0",20120203).
+connection("10.0.0.1","0.10.66.1",20120203).
+connection("0.10.0.1","10.0.0.1",20120403).
 
 %%3.
+%Welche IP wurde wehm zugewiesen
+?- anschluss(ID,Name) , ip(IP,_,_,ID).
+
 
 %%% A4 %%%
 /*
