@@ -4,7 +4,7 @@
 % 
 % Finn-Lasse Jörgensen 6700628 4joergen@informatik.uni-hamburg.de
 % Fabian Behrend
-% Daniel Klotzsche 6535732
+% Daniel Klotzsche 6535732 daniel_klotzsche@hotmail.de
 %
 % Wir sind bereit folgende Aufgaben zu präsentieren:
 %
