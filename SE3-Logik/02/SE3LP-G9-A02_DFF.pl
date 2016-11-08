@@ -94,6 +94,7 @@ anschluss(1,hans).
 anschluss(2,peter).
 anschluss(3,hellen).
 anschluss(4,petra).
+anschluss(5,lars).
 
 :- dynamic ip/4.
 
@@ -105,6 +106,7 @@ ip("10.0.0.1",20120101,20130101,4).
 ip("0.10.0.1",20120101,20121120,3).
 ip("0.10.3.1",20121120,20130101,3).
 ip("0.10.66.1",20120301,20120701,2).
+ip("0.0.1.0",20130101,20131001,3).
 
 :- dynamic connection/3.
 
@@ -116,7 +118,14 @@ connection("0.10.0.1","10.0.0.1",20120403).
 %%3.
 %Welche IP wurde wem zugewiesen
 ?- anschluss(ID,Name) , ip(IP,_,_,ID).
-
+%Wer hatte wann mit jemanden eine connection
+?- connection(A,B,T) , ip(A,AT1,AT2,IDA) , AT1<=T , T<=AT2 , ip(B,BT1,BT2,IDB) , BT1<=T , T<=BT2 , anschluss(IDA,AName) , anschluss(IDB,BName).
+%Wann wurde eine IP benutzt
+?- ip("0.0.1.0",Von,Bis,_).
+%Wer hatte eine connection zu sich selber
+?- connection(IP,IP,T) , ip(IP,T1,T2,ID) , T1<=T , T2>=T , anschluss(ID,Name).
+%Alle Registrierten Benutzer die eine IP hatten
+?- anschluss(ID,Name) , ip(_,_,_,ID).
 
 %%% A4 %%%
 /*
