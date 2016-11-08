@@ -114,7 +114,7 @@ connection("10.0.0.1","0.10.66.1",20120203).
 connection("0.10.0.1","10.0.0.1",20120403).
 
 %%3.
-%Welche IP wurde wehm zugewiesen
+%Welche IP wurde wem zugewiesen
 ?- anschluss(ID,Name) , ip(IP,_,_,ID).
 
 
@@ -125,7 +125,11 @@ einer Relation mit dem angegebenen Prädikatsnamen und den dazugehörigen
 Argumenten spezifizieren, wobei eine unterschiedliche Stelligkeit desselben
 Prädikatsnamens eine unterschiedliche Relation definiert.
 
-Regel:
+Regel: Regeln sind Einträge bzw. Klauseln in einer Datenbank. Diese besagen, dass bei Gültigkeit
+eines bestimmten Fakts ein anderer, durch die Regel definierter Fakt ebenso gilt.
+Mithilfe von Regeln lassen sich neue Fakten aus bisher bekannten Fakten ableiten.
+Durch Regeln wird eine mögliche Redundanz vermieden und es können Relationen über
+unendlichen Domänen spezifiziert werden.
 
 Anfrage: Anfragen sind ebenfalls elementare Klauseln einer Datenbank, welche am
 Systemprompt einzugeben sind. Sie prüfen anhand der Fakten der Datenbasis auf Konsistenz
