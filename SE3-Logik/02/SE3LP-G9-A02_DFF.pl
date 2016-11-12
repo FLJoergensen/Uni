@@ -79,8 +79,7 @@ P1 und P2 sind halbgeschwister (Gleicher Vater unterschidliche Mutter)
 %-> false.
 
 %% 5.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%TODO%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-?- obj(Nr,_,gaertnerstr,_,_),bew(_,Nr,Verkaeufer,Kaeufer,Preis1,_),(bew(_,_,_,_,PreisGroesser,_),PreisGroesser>Preis1.
+?- findall(Preis, (obj(Nr, _, gaertnerstr, _, _), bew(_, Nr, _, _, Preis, _)), Liste), max_list(Liste, Max).
 
 %%% A3 %%%
 
