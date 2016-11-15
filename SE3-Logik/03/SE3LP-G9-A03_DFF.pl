@@ -10,6 +10,8 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+[medien]
+
 %%% A1 %%%
 /*
 Syntax:
@@ -47,5 +49,7 @@ Verlag,Erscheinungsjahr,Lagerbestand),verkauft(PId,_,Preis,_,_).
 %%% A4 %%%
 %1.
 ?- KId=1,kategorie(Id_Unterkategorie,Name,KId)
+%2.
+?-
 
 %%% A5 %%%
