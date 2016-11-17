@@ -51,5 +51,3 @@ Verlag,Erscheinungsjahr,Lagerbestand),verkauft(PId,_,Preis,_,_).
 ?- KId=1,kategorie(Id_Unterkategorie,Name,KId)
 %2.
 ?-
-
-%%% A5 %%%
