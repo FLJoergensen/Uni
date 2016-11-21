@@ -43,6 +43,7 @@ kategorie_pfad(K_ID, K_Name, PfadListe) :-
 	ReversePfadListe),
 	reverse(ReversePfadListe, PfadListe).
 
+
 % Aufgabe 2.3
 % liste alle Prokdukte der Kategorie einschlieﬂlich  derer ihrer Unterkategorien auf.
 % alle_produkte_in_kategorie( Kategorie ID, Kategorie Name, Liste der Produkte in Kategorie in der Form [(34567, hoffnung, sand_molly), ...])
