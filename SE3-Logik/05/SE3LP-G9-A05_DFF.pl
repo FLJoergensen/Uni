@@ -48,6 +48,11 @@
 
 %%% A2 %%%
 
+%% Ein Praedikat, das eine Peano-Zahl in eine Integer-Zahl umwandelt.
+%peanoToInt(?Peano, ?Int)
+%Rekursion stoppt bei: 0 = 0
+peanoToInt(0,0).
+peanoToInt(s(N),X) :- peanoToInt(N,X1), X is X1+1.
 
 %%% A3 %%%
 
