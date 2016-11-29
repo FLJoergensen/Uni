@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Aufgabenblatt 05 - SE3-LP WiSe 16/17
-% 
+%
 % Finn-Lasse Jörgensen 6700628 4joergen@informatik.uni-hamburg.de
 % Fabian Behrendt 6534523 fabian.behrendt95@gmail.com
 % Daniel Klotzsche 6535732 daniel_klotzsche@hotmail.de
@@ -18,7 +18,7 @@
 % a(m, p) = a(m, p)
 % Unifikation erfolgreich!
 
-% s(1, 2) = s(P, P) ? 
+% s(1, 2) = s(P, P) ?
 % s/2 = s/2
 % P = 1
 % Unifizieren fehlgeschlagen
@@ -114,6 +114,25 @@ add(s(X), Y, s(R)) :-
 
 %%% A3 %%%
 
+uebergeordnet(Kategorie, Ueberkategorie) :- sub(Kategorie, _, Ueberkategorie).
+uebergeordnet(Kategorie, Ueberkategorie) :-
+    sub(Kategorie, _, X),
+    uebergeordnet(X, Ueberkategorie).
+
+ebene_von(Ebene, Kategorie) :- sub(Kategorie, Ebene, _).
+ebene_von(Ebene, Kategorie) :-
+    reich(Kategorie),
+    Ebene = reich.
+
+uebergeordnet(Kategorie, Ebene, Ueberkategorie) :-
+    (
+        sub(Kategorie, _, Ueberkategorie);
+        (
+            sub(Kategorie, _, X),
+            uebergeordnet(X, _, Ueberkategorie)
+        )
+    ),
+ebene_von(Ebene, Ueberkategorie).
 
 %%% A4 %%%
 
@@ -176,7 +195,7 @@ berechneMinWeichenAbfahrt(Gleis1, Gleis2, Min) :-
 % Das Prädikat abfahrt(Nach_Ort, Gleis) gibt an, auf welchem Gleis ein Zug, der
 % nach Nach_Ort fährt, abfahren muss.
 % Hierbei ist die Anzahl der durchfahrenen Gleise minimal.
-% 
+%
 % abfahrt(?Nach_Ort, -Gleis)
 abfahrt(Nach_Ort, Gleis) :-
 	ausfahrt(Abfahrtsgleis, Nach_Ort),
