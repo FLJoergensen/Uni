@@ -86,11 +86,11 @@ fibonacci_endr(1, 2).
 fibonacci_endr(N, F) :-
         fibonacci_endr_schritt(1,1,0,N,F).
 
-fibonacci_endr_schritt(_F, F1, N, N, F1).
-fibonacci_endr_schritt(F0, F1, I, N, F) :-
-        F2 is F0+F1,
-        I2 is I + 1,
-        fibonacci_endr_schritt(F1, F2, I2, N, F).
+fibonacci_endr_schritt(_, F1, N, N, F1).
+fibonacci_endr_schritt(F0, F1, Akk, N, F) :-
+        F2 is F0 + F1,
+        Akk_2 is Akk + 1,
+        fibonacci_endr_schritt(F1, F2, Akk_2, N, F).
         
 % ?- time(fibonacci(10, R)).
 % 353 inferences, 0.000 CPU in 0.000 seconds (?% CPU, Infinite Lips)
