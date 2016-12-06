@@ -112,5 +112,150 @@ goldener_schnitt_fibo(N, Result) :-
 
 
 %%% A3 %%%
+%% Aufgabe 3.1
 
+% Definiert ein Prädikat als Typtest für Binärbäume.
+%
+% binaryTree(+X)
+binaryTree(X) :-
+	atom(X).
 
+binaryTree(s(X, Y)) :-
+	binaryTree(X),
+	binaryTree(Y).
+
+% Tests %
+% ?- binaryTree(a).
+% true.
+
+% ?- binaryTree(s(a)).
+% false.
+
+% ?- binaryTree(s(a, b)).
+% true.
+
+% ?- binaryTree(s(s(a, b), c)).
+% true.
+
+% ?- binaryTree(s(a, s(b, c))).
+% true.
+
+% ?- binaryTree(s(a, 1)).
+% false.
+
+%% Aufgabe 3.2
+% Das Prädikat lokaleTiefe(Binärbaum, Tiefe) berechnet für einen Binärbaum
+% die lokalen Einbettungstiefen auf allen Pfaden vom Spitzenknoten zu den
+% einzelnen Blattknoten.
+%
+% lokaleTiefe(+Binärbaum, -Tiefe)
+lokaleTiefe(X, 0) :-
+	atom(X).
+
+lokaleTiefe(s(X, Y), Tiefe) :-
+	binaryTree(s(X, Y)),
+	lokaleTiefe(X, TiefeX),
+	Tiefe is TiefeX + 1.
+
+lokaleTiefe(s(X, Y), Tiefe) :-
+	binaryTree(s(X, Y)),
+	lokaleTiefe(Y, TiefeY),
+	Tiefe is TiefeY + 1.
+
+% Tests %
+% ?- lokaleTiefe(a, Tiefe).
+% Tiefe = 0.
+
+% ?- lokaleTiefe(s(a, b), Tiefe).
+% Tiefe = 1 ;
+% Tiefe = 1.
+
+% ?- lokaleTiefe(s(s(a, s(b, c)), s(d, e)), Tiefe).
+% Tiefe = 2 ;
+% Tiefe = 3 ;
+% Tiefe = 3 ;
+% Tiefe = 2 ;
+% Tiefe = 2.
+
+%% Aufgabe 3.3
+% Das nichtrekursive Prädikat maxTiefe(Binärbaum, Tiefe) ermittelt für einen
+% Binärbaum die maximale Einbettungstiefe.
+%
+% maxTiefe(+Binärbaum, -Tiefe)
+maxTiefe(Baum, Tiefe) :-
+	findall(LokaleTiefe, lokaleTiefe(Baum, LokaleTiefe), Tiefenliste),
+	max_list(Tiefenliste, Tiefe).
+
+% Tests %
+% ?- maxTiefe(a, Tiefe).
+% Tiefe = 0.
+
+% ?- maxTiefe(s(a, b), Tiefe).
+% Tiefe = 1.
+
+% ?- maxTiefe(s(s(a, b), c), Tiefe).
+% Tiefe = 2.
+
+% ?- maxTiefe(s(a, s(b,c)), Tiefe).
+% Tiefe = 2.
+
+%% Aufgabe 3.4
+% Das rekursive Prädikat maxTiefeAlt(Binärbaum, Tiefe) ermittelt für einen
+% Binärbaum die maximale Einbettungstiefe.
+%
+% maxTiefeAlt(+Binärbaum, -Tiefe)
+maxTiefeAlt(X, 0) :-
+	atom(X).
+
+maxTiefeAlt(s(X, Y), Tiefe) :-
+	maxTiefeAlt(X, TiefeX),
+	maxTiefeAlt(Y, TiefeY),
+	Tiefe is 1 + max(TiefeX, TiefeY).
+
+% Tests %
+% ?- maxTiefeAlt(a, Tiefe).
+% Tiefe = 0.
+
+% ?- maxTiefeAlt(s(a, b), Tiefe).
+% Tiefe = 1.
+
+% ?- maxTiefeAlt(s(s(a, b), c), Tiefe).
+% Tiefe = 2.
+
+% ?- maxTiefeAlt(s(a, s(b,c)), Tiefe).
+% Tiefe = 2.
+
+%% Aufgabe 3.5
+% Das Prädikat minTiefeAlt(Binärbaum, Tiefe) ermittelt für einen
+% Binärbaum die minimale Einbettungstiefe.
+%
+% minTiefeAlt(+Binärbaum, -Tiefe)
+minTiefeAlt(X, 0) :-
+	atom(X).
+
+minTiefeAlt(s(X, Y), Tiefe) :-
+	minTiefeAlt(X, TiefeX),
+	minTiefeAlt(Y, TiefeY),
+	Tiefe is 1 + min(TiefeX, TiefeY).
+
+% Das Prädikat balanciert(Binärbaum) überprüft, ob ein Binärbaum balanciert
+% ist, d.h. die lokalen Einbettungstiefen dürfen sich maximal um den Wert
+% eins unterscheiden.
+%
+% balanciert(+Binärbaum)
+balanciert(Baum) :-
+	maxTiefeAlt(Baum, MaxTiefe),
+	minTiefeAlt(Baum, MinTiefe),
+	MaxTiefe = MinTiefe.
+
+balanciert(Baum) :-
+	maxTiefeAlt(Baum, MaxTiefe),
+	minTiefeAlt(Baum, MinTiefe),
+	MaxTiefe =:= MinTiefe + 1.
+
+% Tests %
+% ?- balanciert(s(a, s(b, c))).
+% true.
+
+% ?- balanciert(s(a, s(b, s(c, d)))).
+% false.
