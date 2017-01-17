@@ -136,19 +136,30 @@ create_data_dreistellig([row(Date, Value1, Value2) | Tail], List1, List2, List3)
 %
 % csv_to_pl_zweistellig(+Station, +Komponente, +Messzeit, ...)
 csv_to_pl_zweistellig(Station, Komponente, Messzeit, Timestamp, Abstand, Daten) :-
-	assertz(pollution_data(Station, Komponente, Messzeit, Timestamp, Abstand, Daten)),
-	listing(pollution_data).
+	assertz(my_pollution_data(Station, Komponente, Messzeit, Timestamp, Abstand, Daten)),
+	listing(my_pollution_data).
 
 % Schreibt die beiden finalen Ausdrücke in die Datenbasis und zeigt diese danach an.
 %
 % csv_to_pl_dreistellig(+Station1, +Station2, +Komponente1, ...)
 csv_to_pl_dreistellig(Station1, Station2, Komponente1, Komponente2, Messzeit1, Messzeit2,
 						Timestamp1, Timestamp2, Abstand1, Abstand2, Daten1, Daten2) :-
-	assertz(pollution_data(Station1, Komponente1, Messzeit1, Timestamp1, Abstand1, Daten1)),
-	assertz(pollution_data(Station2, Komponente2, Messzeit2, Timestamp2, Abstand2, Daten2)),
-	listing(pollution_data).
+	assertz(my_pollution_data(Station1, Komponente1, Messzeit1, Timestamp1, Abstand1, Daten1)),
+	assertz(my_pollution_data(Station2, Komponente2, Messzeit2, Timestamp2, Abstand2, Daten2)),
+	listing(my_pollution_data).
 
-%% 1.Bonus
+% Tests %
+
+% ?- csv_to_pl("68HB-2016-w01.csv").
+% :- dynamic my_pollution_data/6.
+%
+% my_pollution_data('Habichtstraße', 'PM10', '24hg', 1451865600, 3600, [36, 37, 37, 38, 39, 39, 40, 41, 41, 42, 42, 43, 43, 44, 44, 45, 45, 46, 47, 47, 48, 48, 49, 49, 49, 49, 50, 50, 50, 51, 51, 52, 52, 53, 53, 54, 54, 54, 54, 54, 54, 53, 53, 53, 52, 52, 51, 50, 50, 50, 50, 50, 49, 50, 50, 50, 50, 49, 49, 48, 48, 47, 47, 47, 47, 47, 46, 46, 46, 46, 46, 47, 48, 49, 50, 51, 53, 54, 55, 56, 57, 59, 61, 63, 66, 69, 72, 74, 77, 79, 81, 83, 86, 88, 90, 91, 91, 91, 90, 89, 87, 84, 81, 78, 74, 71, 67, 63, 59, 54, 50, 46, 43, 40, 37, 34, 31, 28, 26, 24, 22, 20, 19, 17, 16, 16, 17, 17, 18, 18, 19, 19, 20, 20, 20, 20, 20, 20, 20, 20, 21, 21, 21, 21, 21, 21, 22, 22, 23, 23, 23, 24, 24, 25, 25, 26, 26, 26, 26, 27, 27, 27, 27, 27, 26, 26, 26, 25, 25]).
+% my_pollution_data('Habichtstraße', 'PM2,5', '24hg', 1451865600, 3600, [31, 32, 33, 34, 34, 35, 36, 36, 37, 38, 38, 39, 39, 40, 40, 41, 41, 42, 42, 42, 43, 43, 43, 44, 44, 44, 44, 44, 45, 45, 45, 46, 46, 46, 46, 47, 47, 47, 47, 47, 47, 46, 46, 46, 46, 45, 45, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 43, 43, 42, 42, 41, 41, 41, 40, 40, 39, 39, 39, 39, 39, 40, 40, 41, 41, 42, 43, 44, 45, 46, 47, 49, 52, 54, 57, 59, 61, 64, 66, 68, 70, 72, 74, 76, 77, 78, 78, 78, 77, 76, 73, 70, 67, 64, 61, 57, 54, 50, 46, 42, 39, 36, 33, 31, 28, 25, 23, 20, 18, 16, 14, 13, 11, 10, 10, 10, 10, 10, 11, 11, 11, 12, 12, 12, 12, 12, 11, 11, 11, 12, 12, 12, 12, 12, 12, 13, 13, 14, 14, 14, 15, 16, 16, 17, 17, 18, 18, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 18]).
+%
+% true.
+
+%% 1.Bonus Erstellen Sie ein Prädikat, welches die Daten direkt aus dem
+%% Internet herunterlädt. Nutzen Sie hierfür das http_client-Modul.
 
 % Erzeugt eine CSV-Datei, in der die Messwerte der Kieler Straße innerhalb eines
 % bestimmten Zeitraums gespeichert werden.
@@ -176,6 +187,12 @@ http_to_csv(Start, Ende) :-
 	open(FILE, write, Stream),
 	write(Stream, Data),
 	close(Stream).
+
+% Tests %
+
+% ?- http_to_csv('01.01.2017', '02.01.2017').
+% true.
+% [Datei wurde erzeugt und liegt im Verzeichnis, aus dem die *.pl-Datei geöffnet wurde.]
 
 %%% A2 %%%
 
