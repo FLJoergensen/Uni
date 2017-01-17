@@ -183,32 +183,17 @@ http_to_csv(Start, Ende) :-
 %%% A3 %%%
 :-['68HB-2016-w01-facts.pl'].
 
-%Addiert die Elemente der Liste auf.
-zaehlerpraedikat([],Summe,Summe).
-% KOMMENTAR: siehe auch das eingebaute sum_list/2 :-)
-
-zaehlerpraedikat([ErstesEle|Rest],Zaehler,Summe):-
-	Zaehler1 is ErstesEle + Zaehler,
-	zaehlerpraedikat(Rest,Zaehler1,Summe).
-	
-summiereListen([],Summe,Summe,[],Summe2,Summe2).
-
-summiereListen([ErstesEle|Rest],Zaehler,Summe,[ErstesEle2|Rest2],Zaehler2,Summe2):-
-	Zaehler1 is ErstesEle + Zaehler,
-	Zaehler3 is ErstesEle2 + Zaehler2,
-	summiereListen(Rest,Zaehler1,Summe).
-	summiereListen(Rest2,Zaehler3,Summe2).
-
 korrelationskoeffzient(Zeitreihe1,Zeitreihe2,E):-
 	length(Zeitreihe1,Laenge),
 	N is Laenge,
-	summiereListen(Zeitreihe1,0,Xi,Zeitreihe2,0,Yi), 
+	sum_list(Zeitreihe1,Xi), 
+	sum_list(Zeitreihe2,Yi), 
 	multipliziereListen(Zeitreihe1,Zeitreihe2,Zwischenliste), 
-	zaehlerpraedikat(Zwischenliste,0,Zwischenergebnis), 
+	sum_list(Zwischenliste,Zwischenergebnis), 
 	quadriereListen(Zeitreihe1,XiQuadrat), 
 	quadriereListen(Zeitreihe2,YiQuadrat), 
-	zaehlerpraedikat(XiQuadrat,0,QuadrierteListe1), 
-	zaehlerpraedikat(YiQuadrat,0,QuadrierteListe2), 
+	sum_list(XiQuadrat,QuadrierteListe1), 
+	sum_list(YiQuadrat,QuadrierteListe2), 
 	E is ((N * Zwischenergebnis)-(Xi * Yi))/(sqrt(N * QuadrierteListe1 - (Xi^2))* sqrt((N * QuadrierteListe2) - (Yi^2))).
 
 % Dies ist ein Hilfsprädikat, welches die Elemente von zwei Listen miteinander multipliziert.
