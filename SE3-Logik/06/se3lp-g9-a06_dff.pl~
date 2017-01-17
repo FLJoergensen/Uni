@@ -148,8 +148,7 @@ goldener_schnitt_incr(Rekursionen,R) :-
     goldener_schnitt_absteigend(Resultat, R).
 
 /*
-Es werden ungefähr 5-6 Schritte benötigt bevor die
-Darstellungsgenauigkeit nicht mehr gesteigert werden kann.
+Auch wenn es schlecht zu erkennen ist, sollte es nach 5 oder 6 Schritten unter die Darstellungsgenauigkeit sinken.
 */
 
 %%% A3 %%%
