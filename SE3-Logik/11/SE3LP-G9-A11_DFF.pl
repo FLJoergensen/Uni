@@ -73,6 +73,8 @@ teste_vorfahrt(Fahrzeug_A, Fahrzeug_B) :-
         hat_vorfahrt(RegelA, RegelB))),
     writef('"%w" hat Vorfahrt vor "%w", weil "%w" die höchste Prioritaet der getesteten Fahrzeuge hat.\n', [Fahrzeug_A, Fahrzeug_B, RegelA]),!.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%% TODO 1.4 Fehlermeldung, warum Fahrzeug_A keine Vorfahrt vor Fahrzeug_B hat %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %%% A2 %%%
 
 
