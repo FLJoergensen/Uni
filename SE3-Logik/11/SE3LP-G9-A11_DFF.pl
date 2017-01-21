@@ -22,15 +22,16 @@
 %% 	- Fahrzeuge, die an einer gleichberechtigten Kreuzung von rechts kommen,
 %% 	  haben Vorfahrt.
 
-hat_vorfahrt(Verkehrsteilnehmer1, _Verkehrsteilnehmer2) :-
-	verkehrsteilnehmer(Verkehrsteilnehmer1, sondersignal),
-	!.
+prioritaet(sondersignal, 5) :- !.
+prioritaet(kreisverkehr, 4) :- !.
+prioritaet(hauptstrasse, 3) :- !.
+prioritaet(rechts, 2) :- !.
+prioritaet(links, 1) :- !.
 
-hat_vorfahrt(Verkehrsteilnehmer1, Verkehrsteilnehmer2) :-
-	verkehrsteilnehmer(Verkehrsteilnehmer1, kreisverkehr),
-	verkehrsteilnehmer(Verkehrsteilnehmer2, /*TODO*/)
-
-hat_vorfahrt(_Verkehrsteilnehmer1, _Verkehrsteilnehmer2) :- !, fail.
+hat_vorfahrt(Fahrzeug_A, Fahrzeug_B) :-
+    prioritaet(Fahrzeug_A, Prioritaet_A),
+    prioritaet(Fahrzeug_B, Prioritaet_B),
+    Prioritaet_A > Prioritaet_B.
 
 %% 1.2 Modellieren Sie die folgenden Beobachtungen als Fakten und ermitteln Sie,
 %% ob den jeweiligen Fahrzeugen Vorfahrt zu gewähren ist.
@@ -46,6 +47,7 @@ hat_vorfahrt(_Verkehrsteilnehmer1, _Verkehrsteilnehmer2) :- !, fail.
 % Definiert Fahrzeuge mit den dazugehörigen Regeln.
 %
 % verkehrsteilnehmer(?Fahrzeug, ?Regel)
+
 verkehrsteilnehmer(feuerwehr, sondersignal).
 verkehrsteilnehmer(gruenes_auto, kreisverkehr).
 verkehrsteilnehmer(gruenes_auto, links).
@@ -58,6 +60,18 @@ verkehrsteilnehmer(lkw, rechts).
 verkehrsteilnehmer(pferdekutsche, hauptstrasse).
 verkehrsteilnehmer(jeep, nebenstraße).
 verkehrsteilnehmer(jeep, rechts).
+
+% Prüft ob Fahrzeug_A vorfahrt vor Fahrzeug_B hat. Wenn Fahrzeug_B mehr als einmal vorkommt,
+% wird abgebrochen, sobald ein Fahrzeug_B vorfahrt vor Fahrzeug_A hat.
+teste_vorfahrt(Fahrzeug_A, Fahrzeug_B) :-
+    verkehrsteilnehmer(Fahrzeug_A, RegelA),
+    writef('Fahrzeug_A hat die Prioritaet %w\n', [RegelA]),
+    
+    forall(verkehrsteilnehmer(Fahrzeug_B, RegelB), (
+        writef('Testen: %w und %w\n', [RegelA, RegelB]),
+        writef('Fahrzeug_B hat die Prioritaet %w\n', [RegelB]),
+        hat_vorfahrt(RegelA, RegelB))),
+    writef('"%w" hat Vorfahrt vor "%w", weil "%w" die höchste Prioritaet der getesteten Fahrzeuge hat.\n', [Fahrzeug_A, Fahrzeug_B, RegelA]),!.
 
 %%% A2 %%%
 
