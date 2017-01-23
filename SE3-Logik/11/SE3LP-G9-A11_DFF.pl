@@ -84,4 +84,86 @@ teste_regeln(Fahrzeug_A, Fahrzeug_B) :-
 
 %%% A2 %%%
 
+%% 2.1 Implementieren Sie ein Regelsystem zur Bildung der Flexionsformen für deut-
+%% sche Verben, das für einen gegebenen Infinitiv die 1. Person Plural Präsens
+%% und Präteritum, sowie das Perfektpartizip berechnet und dabei mit möglichst
+%% wenigen wortspezifischen Informationen auskommen soll. Beachten Sie dabei
+%% insbesondere die in Tabelle ?? angegebenen Fälle. Lassen Sie zur Vereinfachung
+%% Verben mit abtrennbaren Präfixen (absagen, ausbauen, einsammeln,
+%% durchregnen, zumachen, ...) vorerst außer Betracht. Behandeln Sie die stark
+%% flektierenden Verben als spezielle Ausnahmefälle.
+%% Hinweis: Beginnen Sie auch hier wieder mit den regelmäßigen Bildungen und
+%% fügen Sie schrittweise neue Klauseln für die jeweils allgemeinsten Ausnah-
+%% mefälle hinzu.
 
+% flexion(+Infinitiv, -Praesens, -Praeteritum, -Partizip)
+%
+% Gibt die letzten drei Buchstaben des Infinitivs an ein Hilfsprädikat weiter.
+flexion(Infinitiv, Praesens, Praeteritum, Partizip) :-
+	atom_chars(Infinitiv, Liste),
+	reverse(Liste, ListeR),
+	ListeR = [Z, Y, X | _],
+	flexion_(X, Y, Z, Infinitiv, Praesens, Praeteritum, Partizip).
+
+% Hilfsprädikat zu flexion/4
+% flexion_(+DrittletzterBuchstabe, +VorletzterBuchstabe, +LetzterBuchstabe,
+%		   +Infinitiv, +Praesens, +Praeteritum, +Partizip)
+
+% reguläre Verben auf -eln/-ern
+flexion_(X, Y, Z, Infinitiv, Praesens, Praeteritum, Partizip) :-
+	((X = e,
+	  Y = l,
+	  Z = n);
+	 (X = e,
+	  Y = r,
+	  Z = n)),
+	Praesens = Infinitiv,
+	atom_chars(Infinitiv, ListeInf),
+	reverse(ListeInf, ListeInfR),
+	ListeInfR = [_ | RestListeInfR],
+	reverse(RestListeInfR, ListeInfAnfang),
+	append(ListeInfAnfang, [t, e, n], ListePraet),
+	atom_chars(Praeteritum, ListePraet),
+	append(ListeInfAnfang, [t], ListePartEnde),
+	append([g, e], ListePartEnde, ListePart),
+	atom_chars(Partizip, ListePart),
+	!.
+
+% reguläre Verben mit Stammauslaut auf -d/-t (genau wie -eln/-ern)
+flexion_(X, _Y, _Z, Infinitiv, Praesens, Praeteritum, Partizip) :-
+	(X = d;
+	 X = t),
+	Praesens = Infinitiv,
+	atom_chars(Infinitiv, ListeInf),
+	reverse(ListeInf, ListeInfR),
+	ListeInfR = [_ | RestListeInfR],
+	reverse(RestListeInfR, ListeInfAnfang),
+	append(ListeInfAnfang, [t, e, n], ListePraet),
+	atom_chars(Praeteritum, ListePraet),
+	append(ListeInfAnfang, [t], ListePartEnde),
+	append([g, e], ListePartEnde, ListePart),
+	atom_chars(Partizip, ListePart),
+	!.
+
+% reguläre (schwach flektierende) Verben
+flexion_(_X, Y, Z, Infinitiv, Praesens, Praeteritum, Partizip) :-
+	Y = e,
+	Z = n,
+	Praesens = Infinitiv,
+	atom_chars(Infinitiv, ListeInf),
+	append(Wortanfang, [e, n], ListeInf),
+	append(Wortanfang, [t], WortanfangT),
+	append(WortanfangT, [e, n], ListePraet),
+	atom_chars(Praeteritum, ListePraet),
+	append([g, e], WortanfangT, ListePart),
+	atom_chars(Partizip, ListePart),
+	!.
+	
+
+%% 2.2 Testen Sie Ihre Implementation mit unterschiedlichen Verben und begründen
+%% Sie, warum Ihr Programm ggf. fehlerhafte Resultate erzeugt. Berücksichtigen ¨
+%% Sie dabei auch Neubildungen wie etwa googeln, dödeln, recyceln, grepen, smsen...
+%% Geben Sie an, ob die Ergebnisse Ihres Programms mit Ihrer sprachlichen
+%% Intuition übereinstimmen und erklären Sie etwa auftretende Abweichungen.
+
+%% 2.3 Erweitern Sie Ihre Modellierung auf einige Verben mit abtrennbaren Präfixen.
