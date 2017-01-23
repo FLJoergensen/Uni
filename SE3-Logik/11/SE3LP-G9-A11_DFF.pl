@@ -71,9 +71,16 @@ teste_vorfahrt(Fahrzeug_A, Fahrzeug_B) :-
         writef('Testen: %w und %w\n', [RegelA, RegelB]),
         writef('Fahrzeug_B hat die Prioritaet %w\n', [RegelB]),
         hat_vorfahrt(RegelA, RegelB))),
-    writef('"%w" hat Vorfahrt vor "%w", weil "%w" die höchste Prioritaet der getesteten Fahrzeuge hat.\n', [Fahrzeug_A, Fahrzeug_B, RegelA]),!.
+    writef('"%w" hat Vorfahrt vor "%w", weil "%w" die höchste Prioritaet der getesteten Fahrzeuge hat.\n', [Fahrzeug_A, Fahrzeug_B, RegelA]).
+    
+teste_nachrang(Fahrzeug_A, Fahrzeug_B) :-
+	\+teste_vorfahrt(Fahrzeug_A, Fahrzeug_B),
+	 writef('Fahrzeug "%w" hat keine Vorfahrt vor "%w", da die Prioritaet niedriger ist.\n', [Fahrzeug_A, Fahrzeug_B]).
+	 
+teste_regeln(Fahrzeug_A, Fahrzeug_B) :-
+	teste_nachrang(Fahrzeug_A, Fahrzeug_B),
+	teste_vorfahrt(Fahrzeug_A, Fahrzeug_B).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%% TODO 1.4 Fehlermeldung, warum Fahrzeug_A keine Vorfahrt vor Fahrzeug_B hat %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%% A2 %%%
 
