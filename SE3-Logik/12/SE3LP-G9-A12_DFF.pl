@@ -141,9 +141,8 @@
 %% und Gemeinsamkeiten zwischen den Prolog- und Scheme-Implementationen.
 
 % Peano-Zahlen in Prolog
-%
-% peano(0).
-% peano(s(X)) :- peano(X).
+peano(0).
+peano(s(X)) :- peano(X).
 
 % Peano-Zahlen in Scheme
 %
@@ -160,9 +159,8 @@
 
 
 % lt/2 in Prolog
-%
-% lt(0, s(_)).
-% lt(s(X), s(Y)) :- lt(X, Y).
+lt(0, s(_)).
+lt(s(X), s(Y)) :- lt(X, Y).
 
 % lt/2 in Scheme
 %
@@ -179,11 +177,10 @@
 
 
 % integer2peano/2 in Prolog
-%
-% integer2peano(0, 0) :- !.
-% integer2peano(I, s(P)) :- I1 is I - 1, integer2peano(I1, P).
+integer2peano(0, 0) :- !.
+integer2peano(I, s(P)) :- I1 is I - 1, integer2peano(I1, P).
 
-% integer2peano/2
+% integer2peano/2 in Scheme
 %
 % (define (integer2peano x)
 %   (if (equal? x 0)
@@ -194,11 +191,10 @@
 
 
 % add/3 in Prolog
-%
-% add(0, X, X).
-% add(s(X), Y, s(R)) :- add(X, Y, R).
+add(0, X, X).
+add(s(X), Y, s(R)) :- add(X, Y, R).
 
-% add/3
+% add/3 in Scheme
 %
 % (define (add x y)
 %   (if (equal? (car x) 0)
