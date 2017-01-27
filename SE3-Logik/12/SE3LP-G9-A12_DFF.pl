@@ -140,27 +140,69 @@
 %% Rechnen mit Peano-Zahlen als Scheme-Funktionen. Diskutieren Sie Unterschiede
 %% und Gemeinsamkeiten zwischen den Prolog- und Scheme-Implementationen.
 
+% Peano-Zahlen in Prolog
+%
+% peano(0).
+% peano(s(X)) :- peano(X).
+
 % Peano-Zahlen in Scheme
 %
 % (define (peano? x)
-%  (if (and (equal? (car x) 0)
+%   (if (and (equal? (car x) 0)
 %           (null? (cdr x)))
 %      #t
-%      (if(equal? (car x) 's)
+%      (if (equal? (car x) 's)
 %      (peano? (cdr x))
 %      #f
 %      )
 %  )
 % )
 
+
+% lt/2 in Prolog
+%
+% lt(0, s(_)).
+% lt(s(X), s(Y)) :- lt(X, Y).
+
 % lt/2 in Scheme
 %
+% (define (lt x y)
+%   (if (and (equal? (car x) 0)
+%            (> (length y) 1))
+%       #t
+%       (if (and (equal? (car x) 's)
+%                (equal? (car y) 's))
+%           (lt (cdr x) (cdr y))
+%           #f)
+%       )
+%   )
+
+
+% integer2peano/2 in Prolog
 %
+% integer2peano(0, 0) :- !.
+% integer2peano(I, s(P)) :- I1 is I - 1, integer2peano(I1, P).
 
 % integer2peano/2
 %
+% (define (integer2peano x)
+%   (if (equal? x 0)
+%       '(0)
+%       (append '(s) (integer2peano (- x 1)))
+%       )
+%   )
+
+
+% add/3 in Prolog
 %
+% add(0, X, X).
+% add(s(X), Y, s(R)) :- add(X, Y, R).
 
 % add/3
 %
-%
+% (define (add x y)
+%   (if (equal? (car x) 0)
+%       y
+%       (append '(s) (add (cdr x) y))
+%       )
+%   )
