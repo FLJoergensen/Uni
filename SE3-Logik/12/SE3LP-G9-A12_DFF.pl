@@ -99,6 +99,21 @@
 %%                     (foo1 (cdr x) (cdr y))
 %%                     (foo1 x (cdr y)) ) ) ) )
 
+% Alle Listenelemente von X sind in gegebender Reihenfolge in Y enthalten.
+foo1([], _).
+foo1(_, []) :- fail, !.
+foo1([X | X_Rest], [Y | Y_Rest]) :-
+    X = Y ->
+        foo1(X_Rest, Y_Rest);
+        foo1([X | X_Rest], Y_Rest).
+        
+% ?- foo1([1,2,3,4,5,6], [1,2,3,4,5,6,7,8,9]).
+% true .
+% ?- foo1([1,2,3,5], [2,3,4,5,6,7]).
+% false.
+% ?- foo1([1,3,2], [3,1,2]).
+% false.
+
 %% 2.2 (define (foo2 x y)
 %%         (if (null? x)
 %%             y
@@ -106,12 +121,39 @@
 %%                 (foo2 (cdr x) y)
 %%                 (cons (car x) (foo2 (cdr x) y) ) ) ) )
 
+% Berechnet eine Liste aus den Listen X und Y, welche die Elemente von 
+% X und Y ohne duplikate enthält.
+foo2([], Y, Y).
+foo2([X | X_Rest], Y, Ergebnis_Liste) :-
+    member(X, Y) ->
+        foo2(X_Rest, Y, Ergebnis_Liste);
+        (
+            foo2(X_Rest, Y, Ergebnis_Liste_Rest),
+            Ergebnis_Liste = [X | Ergebnis_Liste_Rest]
+        ).
+        
+% ?- foo2([1,2,3,4,5,6], [1,2,3,4,5,6,7,8],E).
+% E = [1, 2, 3, 4, 5, 6, 7, 8].
+
 %% 2.3 (define (foo3 x y)
 %%         (if (null? x)
 %%             (quote ())
 %%             (if (member (car x) y)
 %%                 (foo3 (cdr x) y)
 %%                 (cons (car x) (foo3 (cdr x) y) ) ) ) )
+
+% Es wird eine Liste mit allen Elementen aus X, die nicht in Y sind ausgegeben.
+foo3([],_,[]).
+foo3([X | X_Rest], Y, Ergebnis_Liste) :-
+    member(X, Y) ->
+        foo3(X_Rest, Y, Ergebnis_Liste);
+        (
+            foo3(X_Rest, Y, Ergebnis_Liste_Rest),
+            Ergebnis_Liste = [X | Ergebnis_Liste_Rest]
+        ).
+
+% ?- foo3([1,2,3,4,5],[3,4,5,6],E).
+% E = [1, 2].
 
 %% 2.4 (define (foo4 x)
 %%         (letrec
@@ -122,6 +164,17 @@
 %%                           (foo4a (cdr x) y) ) ) )) )
 %%         (foo4a (cdr x) (car x)) ) )
 
+% Der Maximale Wert der Liste wird berechnet.
+foo4([X], X).
+foo4([X | X_Rest], Maximum) :-
+    foo4(X_Rest, Maximum_Zwischenergebnis),
+    ((X > Maximum_Zwischenergebnis) ->
+        Maximum = X;
+        Maximum = Maximum_Zwischenergebnis).
+        
+% ?- foo4([20, 35, 99, 2, 50],M).
+% M = 99 .
+
 %% Hinweis: letrec ist eine Variante von let, die auch die Verwendung rekursiver
 %% Funktionsdefinitionen unterstützt.
 
@@ -131,7 +184,15 @@
 %%             (+ (* (car x) (car y))
 %%                (foo5 (cdr x) (cdr y))) ) )
 
-
+%Berechnet das Skalarprodukt
+foo5([],_, 0).
+foo5(_,[],0).
+foo5([X | X_Rest], [Y | Y_Rest], Ergebnis) :-
+    foo5(X_Rest, Y_Rest, Zwischenergebnis),
+    Ergebnis is X* Y + Zwischenergebnis.
+    
+% foo5([1,2,3],[1,4,2],E).
+% E = 15 .
 
 %%% A3 %%%
 
