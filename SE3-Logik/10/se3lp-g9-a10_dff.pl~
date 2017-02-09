@@ -195,35 +195,20 @@ http_to_csv(Start, Ende) :-
 % [Datei wurde erzeugt und liegt im Verzeichnis, aus dem die *.pl-Datei geöffnet wurde.]
 
 %%% A2 %%%
-filter_nodata(Datenreihe,R):-
-	exclude(testnodata, Datenreihe, R).
-testnodata(Data):-
-	Data = "".
+filter_nodata(Datenreihe,X,R):-
+	R = findall(X,not(X is ""),Datenreihe).
+
+summe([],0). 
+summe([K|Rs],NS):-
+	summe(Rs,S),
+	NS is K+S.
 	
-durchschnitt([],""):- !.
+durchschnitt([],0):- !.
 durchschnitt(Ls,D):-
-	filter_nodata(Ls,"",Lsnew),
-	sum_list(Lsnew,S),
+	Lsnew is Ls,
+	summe(Lsnew,S),
 	A = length(Lsnew),
-	D is S / A.
-
-%%2.1
-granularietaet(Datalist,Abstand,Zielgroese,Result):-
-	granularietaet(Datalist,Abstand,Zielgoese,0,[],[],Result).
-
-%granularietaet(Datalist,Abstand,Zielgoese,Counter,Part,State,Result)
-granularietaet([],_,_,_,_,State,Result):-
-	Result = State.
-granularietaet([H|R],Abstand,Zielgroese,Counter,Part,[SH|SR],Result):-
-	Zielgroese > Counter,
-	granularietaet(R,Abstand,Zielgoese,Counter+Abstand,[H|Part],State,Result).
-granularietaet(Datalist,Abstand,Zielgroese,Counter,Part,[SH|SR],Result):-
-	Zielgroese =< Counter,
-	filter_nodata(Part,Plist),
-	durchschnitt(Plist,Pvalue),
-	granularietaet(Datalist,Abstand,Zielgoese,0,[],[Pvalue|State],Result).
-%%2.2
-	
+	D is S/A.
 
 %%% A3 %%%
 :-['68HB-2016-w01-facts.pl'].
